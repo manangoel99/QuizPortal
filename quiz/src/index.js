@@ -3,33 +3,25 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import RegisterSignIn from './RegisterSignIn';
 import registerServiceWorker from './registerServiceWorker';
+import { func } from 'prop-types';
 
-ReactDOM.render(<RegisterSignIn />, document.getElementById('root'));
+if(!localStorage.getItem('user')) {
 
-//class Index extends Component {
-//    constructor() {
-//        super();
-//        this.state = {
-//            loggedin : false
-//        };
-//    }
-//
-//    changeloggedin = () => {
-//        this.setState({
-//            loggedin : true
-//        });
-//    }
-//
-//    render() {
-//        return(
-//            <div>
-//                {this.state.loggedin ? null : <RegisterSignIn siginvar={this.state.loggedin} changeloggedin={this.changeloggedin} />}
-//            </div>
-//        )
-//    }
-//
+    var user = {
+        username: '',
+        isadmin: false,
+        isloggedin: false
+    };
+
+    localStorage.setItem('user', JSON.stringify(user));
+}
+
+//window.onunload = function () {
+//    localStorage.clear();
 //}
 //
-//ReactDOM.render(<Index />, document.getElementById('root'));
+if (JSON.parse(localStorage.getItem('user')).isloggedin === false) {
+    ReactDOM.render(<RegisterSignIn />, document.getElementById('root'));
+}
 
 registerServiceWorker();

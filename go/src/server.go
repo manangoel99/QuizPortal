@@ -38,8 +38,15 @@ func main() {
 	r := gin.Default()
 	r.POST("/signup", register)
 	r.POST("/signin", signIn)
+	r.GET("/user/:id", dashboard)
 	r.Run()
 
+}
+
+func dashboard(c *gin.Context) {
+	c.JSON(200, gin.H{
+		"Ping": "pong",
+	})
 }
 
 func signIn(c *gin.Context) {
@@ -56,8 +63,11 @@ func signIn(c *gin.Context) {
 		c.AbortWithStatus(404)
 		fmt.Println(err)
 	} else {
+		fmt.Println(u)
 		c.Header("access-control-allow-origin", "*")
-		c.JSON(200, u)
+		c.JSON(200, gin.H{
+			"user": u,
+		})
 	}
 }
 

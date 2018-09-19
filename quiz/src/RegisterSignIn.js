@@ -71,7 +71,17 @@ class Signup extends Component {
         method : 'POST',
         body: JSON.stringify(this.state)
       }).then(response => {
-        console.log(response);
+        if (response.ok) {
+          response.json().then(json => {
+            console.log(json);
+            var user = {
+              username: json.username,
+              isadmin: json.isadmin,
+              isloggedin: true
+            };
+            localStorage.setItem('user', JSON.stringify(user));
+          });
+        }
       });
     }
 
@@ -102,7 +112,7 @@ class Login extends Component {
       SignInUsername : '',
       SignInPassword : ''
     }
-    
+    console.log(localStorage);
     this.handlechange = this.handlechange.bind(this);
 
   }
@@ -121,7 +131,19 @@ class Login extends Component {
       method : 'POST',
       body : JSON.stringify(this.state) 
     }).then(response => {
-      console.log(response);
+      if(response.ok) {
+        response.json().then(json => {
+          //console.log(json)
+          var user = {
+            username : json.user.username,
+            isadmin : json.user.isadmin,
+            isloggedin : true
+          };
+          localStorage.setItem('user', JSON.stringify(user));
+          console.log(JSON.parse(localStorage.getItem('user')));
+          //window.location.reload();
+        });
+      }
     });
   }
 
