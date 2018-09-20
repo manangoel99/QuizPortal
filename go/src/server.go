@@ -23,16 +23,24 @@ type user struct {
 
 type question struct {
 	ID          uint   `json:"id"`
-	quizName    string `json:"quizname"`
-	quest       string `json:"question"`
-	option1text string `json:"option1text"`
-	option2text string `json:"option2text"`
-	option3text string `json:"option3text"`
-	option4text string `json:"option4text"`
-	option1ans  bool   `json:"option1ans"`
-	option2ans  bool   `json:"option2ans"`
-	option3ans  bool   `json:"option3ans"`
-	option4ans  bool   `json:"option4ans"`
+	QuizName    string `json:"quizname"`
+	Quest       string `json:"question"`
+	Option1text string `json:"option1text"`
+	Option2text string `json:"option2text"`
+	Option3text string `json:"option3text"`
+	Option4text string `json:"option4text"`
+	Option1ans  bool   `json:"option1ans"`
+	Option2ans  bool   `json:"option2ans"`
+	Option3ans  bool   `json:"option3ans"`
+	Option4ans  bool   `json:"option4ans"`
+	QuestionNum uint   `json:"question_number"`
+	Genre       string `json:"genre"`
+}
+
+type quiz struct {
+	ID    uint   `json:"id"`
+	Name  string `json:"name"`
+	Genre string `json:"genre"`
 }
 
 type loginuser struct {
@@ -49,13 +57,44 @@ func main() {
 
 	db.AutoMigrate(&user{})
 	db.AutoMigrate(&question{})
+	db.AutoMigrate(&quiz{})
 
 	r := gin.Default()
 	r.POST("/signup", register)
 	r.POST("/signin", signIn)
 	r.GET("/user/:id", dashboard)
+	r.POST("/AddQuestion", addQuestion)
 	r.Run()
 
+}
+
+func addQuestion(c *gin.Context) {
+	var q question
+
+	c.BindJSON(&q)
+
+	var qu quiz
+
+	qu.Name = q.QuizName
+	qu.Genre = q.Genre
+
+	if db.Where("name = ?", q.QuizName).First(&qu).RecordNotFound() {
+		db.Create(&qu)
+	} else {
+		c.AbortWithStatus(404)
+		fmt.Println("Record Exists")
+	}
+
+	//if err := db.Where("Name = ?", q.QuizName).First(&qu).Error; err != nil {
+	//	db.Create(&qu)
+	//}
+
+	//u := db.Where("quizname = ?", q.QuizName).First(&q)
+	//fmt.Println(u.Value)
+
+	db.Create(&q)
+	c.Header("access-control-allow-origin", "*")
+	c.JSON(200, q)
 }
 
 func dashboard(c *gin.Context) {
