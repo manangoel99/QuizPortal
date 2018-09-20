@@ -4,6 +4,7 @@ import './index.css';
 import RegisterSignIn from './RegisterSignIn';
 import registerServiceWorker from './registerServiceWorker';
 import { func } from 'prop-types';
+import App from './App';
 
 if(!localStorage.getItem('user')) {
 
@@ -22,6 +23,10 @@ if(!localStorage.getItem('user')) {
 //
 if (JSON.parse(localStorage.getItem('user')).isloggedin === false) {
     ReactDOM.render(<RegisterSignIn />, document.getElementById('root'));
+}
+
+else {
+    ReactDOM.render(<App />, document.getElementById('root'));
 }
 
 registerServiceWorker();

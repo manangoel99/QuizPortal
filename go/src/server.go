@@ -21,6 +21,20 @@ type user struct {
 	IsAdmin   bool   `json:"isadmin"`
 }
 
+type question struct {
+	ID          uint   `json:"id"`
+	quizName    string `json:"quizname"`
+	quest       string `json:"question"`
+	option1text string `json:"option1text"`
+	option2text string `json:"option2text"`
+	option3text string `json:"option3text"`
+	option4text string `json:"option4text"`
+	option1ans  bool   `json:"option1ans"`
+	option2ans  bool   `json:"option2ans"`
+	option3ans  bool   `json:"option3ans"`
+	option4ans  bool   `json:"option4ans"`
+}
+
 type loginuser struct {
 	Username string `json:"SignInUsername"`
 	Password string `json:"SignInPassword"`
@@ -34,6 +48,7 @@ func main() {
 	defer db.Close()
 
 	db.AutoMigrate(&user{})
+	db.AutoMigrate(&question{})
 
 	r := gin.Default()
 	r.POST("/signup", register)

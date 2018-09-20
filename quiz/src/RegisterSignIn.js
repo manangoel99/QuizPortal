@@ -141,7 +141,7 @@ class Login extends Component {
           };
           localStorage.setItem('user', JSON.stringify(user));
           console.log(JSON.parse(localStorage.getItem('user')));
-          //window.location.reload();
+          window.location.reload();
         });
       }
     });
