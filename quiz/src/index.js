@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import RegisterSignIn from './RegisterSignIn';
 import registerServiceWorker from './registerServiceWorker';
-import { func } from 'prop-types';
 import App from './App';
 
 if(!localStorage.getItem('user')) {

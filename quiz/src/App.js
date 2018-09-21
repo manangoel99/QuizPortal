@@ -1,8 +1,22 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import Quiz from './AddQuiz';
+import All_Quizes from './All_Quizes';
+import { Button } from '@material-ui/core';
 
 class App extends Component {
+
+    HandleSignOut = () => {
+        var user = {
+            username : '',
+            isadmin : false,
+            isloggedin : false
+        };
+
+        localStorage.setItem('user', JSON.stringify(user));
+        window.location.reload();
+    }
+
     render() {
         return (
             <div>
@@ -14,18 +28,19 @@ class App extends Component {
                                 <Link className="navbar-brand" to={'/'}>React App</Link>
                             </div>
                             <ul className="nav navbar-nav">
-                            {JSON.parse(localStorage.getItem('user')).isadmin ? <li><Link to={'/Quiz'}>Add Quiz</Link></li> : null}
-                                {/*<li><Link to={'/NewPerson'}>Create Person</Link></li>
-                                <li><Link to={'/EditPerson'}>Edit Person</Link></li>
+                                {JSON.parse(localStorage.getItem('user')).isadmin ? <li><Link to={'/Quiz'}>Add Quiz</Link></li> : null}
+                                <li><Link to={'/All_Quizes'}>All Quizes</Link></li>
+                                {/*<li><Link to={'/EditPerson'}>Edit Person</Link></li>
                                 <li><Link to={'/DeletePerson'}>Delete People</Link></li>
                                 <li><Link to={'/ViewPeople'}>View People</Link></li>*/}
+                                <li><Button color="secondary" onClick={this.HandleSignOut}>Sign Out</Button></li>
                             </ul>
                         </div>
                     </nav>
                     <Switch>
                         <Route exact path='/Quiz' component={Quiz} />
-                        {/*<Route exact path='/NewPerson' component={NewPerson} />
-                        <Route exact path='/EditPerson' component={EditPerson} />
+                        <Route exact path='/All_Quizes' component={All_Quizes} />
+                        {/*<Route exact path='/EditPerson' component={EditPerson} />
                         <Route exact path='/DeletePerson' component={DeletePerson} />
                         <Route exact path='/ViewPeople' component={ViewPeople} />*/}
                     </Switch>

@@ -135,7 +135,7 @@ class Quiz extends Component {
                 body : JSON.stringify(obj)
             }).then(response => {
                 console.log(response);
-                if (response.status == 404) {
+                if (response.status === 404) {
                     alert('Quiz With Same Name Exists. Please Change The Name');
                 } 
             });

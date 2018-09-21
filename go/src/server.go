@@ -64,8 +64,22 @@ func main() {
 	r.POST("/signin", signIn)
 	r.GET("/user/:id", dashboard)
 	r.POST("/AddQuestion", addQuestion)
+	r.GET("/All_Quizes", getAll)
 	r.Run()
 
+}
+
+func getAll(c *gin.Context) {
+	var q []quiz
+
+	if err := db.Find(&q).Error; err != nil {
+		c.AbortWithStatus(404)
+		fmt.Println(err)
+	} else {
+		fmt.Println(q)
+		c.Header("access-control-allow-origin", "*")
+		c.JSON(200, q)
+	}
 }
 
 func addQuestion(c *gin.Context) {
