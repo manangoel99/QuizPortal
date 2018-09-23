@@ -65,8 +65,30 @@ func main() {
 	r.GET("/user/:id", dashboard)
 	r.POST("/AddQuestion", addQuestion)
 	r.GET("/All_Quizes", getAll)
+	r.GET("/QuizQues/:id", fetchQuiz)
 	r.Run()
 
+}
+
+func fetchQuiz(c *gin.Context) {
+	fmt.Println(c.Params.ByName("id"))
+
+	quizID := c.Params.ByName("id")
+
+	var q quiz
+
+	db.Where("id = ?", quizID).First(&q)
+	//fmt.Println(q.Name)
+
+	var ques []question
+
+	db.Where("quiz_name = ?", q.Name).Find(&ques)
+
+	//fmt.Println(ques)
+	c.Header("access-control-allow-origin", "*")
+	c.JSON(200, gin.H{
+		"question_arr": ques,
+	})
 }
 
 func getAll(c *gin.Context) {

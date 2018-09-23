@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
-
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { Button } from '@material-ui/core';
+import GiveQuiz from './GiveQuiz';
 class All_Quizes extends Component {
     constructor() {
         super();
         this.state = {
-            data : []
+            data : [],
+            quiz_num : NaN,
+            quiz_selected : false
         };
     }
 
@@ -20,6 +24,16 @@ class All_Quizes extends Component {
                 data : data
             });
         });
+    }
+
+    OpenQuiz = (e) => {
+        console.log(e.target);
+        this.setState({
+            quiz_selected : true,
+            quiz_num : e.target.id
+        });
+        console.log(this.state.quiz_num);
+        this.forceUpdate();
     }
 
     render() {
@@ -38,17 +52,22 @@ class All_Quizes extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            {this.state.data.map(function (item, key) {
+                            {this.state.data.map((item, key) => {
                                 return (
                                     <tr key={key}>
                                         <td>{item.id}</td>
                                         <td>{item.name}</td>
                                         <td>{item.genre}</td>
+                                        <td><Button id={item.id} onClick={this.OpenQuiz} variant="raised" color="primary">Open Quiz</Button></td>
                                     </tr>
                                 )
                             })}
+                            
                         </tbody>
                     </table>
+                    <div>
+                        {this.state.quiz_selected ? <GiveQuiz quizID={this.state.quiz_num} /> : null}
+                    </div>
                 </div>
             </div>
         )

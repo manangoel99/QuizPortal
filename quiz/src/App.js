@@ -33,7 +33,7 @@ class App extends Component {
                                 {/*<li><Link to={'/EditPerson'}>Edit Person</Link></li>
                                 <li><Link to={'/DeletePerson'}>Delete People</Link></li>
                                 <li><Link to={'/ViewPeople'}>View People</Link></li>*/}
-                                <li><Button color="secondary" onClick={this.HandleSignOut}>Sign Out</Button></li>
+                                <li><Link to={'/'}><Button color="secondary" onClick={this.HandleSignOut}>Sign Out</Button></Link></li>
                             </ul>
                         </div>
                     </nav>
