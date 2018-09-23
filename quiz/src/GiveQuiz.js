@@ -12,18 +12,9 @@ class GiveQuiz extends Component {
         };
     }
 
-    componentDidMount() {
-        let id = this.props.quizID
-
-        fetch("http://localhost:8080/QuizQues/" + id, {
-            method : 'GET'
-        })
-        .then((response) => response.json())
-        .then((json) => {
-            console.log(json.question_arr);
-            this.setState({
-                data : json.question_arr,
-            });
+    componentWillReceiveProps() {
+        this.setState({
+            data : this.props.quizData
         });
     }
 

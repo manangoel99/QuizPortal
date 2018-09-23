@@ -8,7 +8,8 @@ class All_Quizes extends Component {
         this.state = {
             data : [],
             quiz_num : NaN,
-            quiz_selected : false
+            quiz_selected : false,
+            spec_quiz_data : []
         };
     }
 
@@ -28,12 +29,23 @@ class All_Quizes extends Component {
 
     OpenQuiz = (e) => {
         console.log(e.target);
+        let id = e.target.id;
+        fetch("http://localhost:8080/QuizQues/" + id, {
+            method : 'GET'
+        })
+        .then((response) => response.json())
+        .then(json => {
+            this.setState({
+                spec_quiz_data : json.question_arr
+            });
+        });
+
         this.setState({
             quiz_selected : true,
             quiz_num : e.target.id
         });
         console.log(this.state.quiz_num);
-        this.forceUpdate();
+        //this.forceUpdate();
     }
 
     render() {
@@ -66,7 +78,7 @@ class All_Quizes extends Component {
                         </tbody>
                     </table>
                     <div>
-                        {this.state.quiz_selected ? <GiveQuiz quizID={this.state.quiz_num} /> : null}
+                        {this.state.quiz_selected ? <GiveQuiz quizData={this.state.spec_quiz_data} /> : null}
                     </div>
                 </div>
             </div>
