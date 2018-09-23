@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { TextField, Button } from '@material-ui/core';
-import Radio from '@material-ui/core/Radio'
+import { TextField, Button, Checkbox } from '@material-ui/core';
 
 class Quiz extends Component {
     constructor() {
@@ -150,6 +149,7 @@ class Quiz extends Component {
         document.getElementById('EnterOption3Text').value = '';
         document.getElementById('EnterOption4Text').value = '';
         document.getElementById('CorrectOption1').checked = false;
+        //document.getElementById('CorrectOption1').valueSelected = null;
         document.getElementById('CorrectOption2').checked = false;
         document.getElementById('CorrectOption3').checked = false;
         document.getElementById('CorrectOption4').checked = false;
@@ -163,13 +163,13 @@ class Quiz extends Component {
                     <TextField name="genre" placeholder="Enter Genre" label="Enter Genre" onChange={this.handleChange}/><br />
                     <TextField id="EnterQuestion" name="EnterQuestion" placeholder="Enter Question" label="Enter Question" onChange={this.handleChange}/><br />
                     <TextField id="EnterOption1Text" name="EnterOption1Text" placeholder="Enter Option 1" label="Enter Option 1" onChange={this.handleChange}/>
-                    <Radio color="primary" id="CorrectOption1" name="CorrectOption1" onChange={this.handleChange} /><br />
+                    <Checkbox color="primary" id="CorrectOption1" name="CorrectOption1" onChange={this.handleChange} /><br />
                     <TextField name="EnterOption2Text" id="EnterOption2Text" placeholder="Enter Option 2" label="Enter Option 2" onChange={this.handleChange}/>
-                    <Radio color="primary" id="CorrectOption2" name="CorrectOption2" onChange={this.handleChange} /><br />
+                    <Checkbox color="primary" id="CorrectOption2" name="CorrectOption2" onChange={this.handleChange} /><br />
                     <TextField name="EnterOption3Text" id="EnterOption3Text" placeholder="Enter Option 3" label="Enter Option 3" onChange={this.handleChange}/>
-                    <Radio color="primary" name="CorrectOption3" id="CorrectOption3" onChange={this.handleChange} /><br />
+                    <Checkbox color="primary" name="CorrectOption3" id="CorrectOption3" onChange={this.handleChange} /><br />
                     <TextField name="EnterOption4Text" id="EnterOption4Text" placeholder="Enter Option 4" label="Enter Option 4" onChange={this.handleChange}/>
-                    <Radio color="primary" id="CorrectOption4" name="CorrectOption4" onChange={this.handleChange} /><br />
+                    <Checkbox color="primary" id="CorrectOption4" name="CorrectOption4" onChange={this.handleChange} /><br />
                     <Button variant="contained" color="secondary" onClick={this.handleAdd}>Add Question</Button>
                 </div>
                 <br />

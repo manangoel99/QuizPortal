@@ -25,7 +25,7 @@ class App extends Component {
                     <nav className="navbar navbar-default">
                         <div className="container-fluid">
                             <div className="navbar-header">
-                                <Link className="navbar-brand" to={'/'}>React App</Link>
+                                <Link className="navbar-brand" to={'/'}>Home</Link>
                             </div>
                             <ul className="nav navbar-nav">
                                 {JSON.parse(localStorage.getItem('user')).isadmin ? <li><Link to={'/Quiz'}>Add Quiz</Link></li> : null}

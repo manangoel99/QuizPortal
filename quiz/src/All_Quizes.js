@@ -44,6 +44,7 @@ class All_Quizes extends Component {
             quiz_selected : true,
             quiz_num : e.target.id
         });
+        console.log(this.state.spec_quiz_data);
         console.log(this.state.quiz_num);
         //this.forceUpdate();
     }
