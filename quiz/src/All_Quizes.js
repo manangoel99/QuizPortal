@@ -44,6 +44,11 @@ class All_Quizes extends Component {
             quiz_selected : true,
             quiz_num : e.target.id
         });
+
+        if (document.getElementById("Score")) {
+            document.getElementById("Score").innerHTML = "";
+        }
+
         console.log(this.state.spec_quiz_data);
         console.log(this.state.quiz_num);
         //this.forceUpdate();
@@ -79,7 +84,7 @@ class All_Quizes extends Component {
                         </tbody>
                     </table>
                     <div>
-                        {this.state.quiz_selected ? <GiveQuiz quizData={this.state.spec_quiz_data} /> : null}
+                        {this.state.quiz_selected ? <GiveQuiz quizID={this.state.quiz_num} quizData={this.state.spec_quiz_data} /> : null}
                     </div>
                 </div>
             </div>

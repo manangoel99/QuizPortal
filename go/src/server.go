@@ -48,6 +48,12 @@ type loginuser struct {
 	Password string `json:"SignInPassword"`
 }
 
+type quizAttempted struct {
+	UserID uint   `json:"UserID"`
+	QuizID string `json:"QuizID"`
+	Score  string `json:"Score"`
+}
+
 func main() {
 	db, err = gorm.Open("sqlite3", "./gorm.db")
 	if err != nil {
@@ -58,16 +64,48 @@ func main() {
 	db.AutoMigrate(&user{})
 	db.AutoMigrate(&question{})
 	db.AutoMigrate(&quiz{})
+	db.AutoMigrate(&quizAttempted{})
 
 	r := gin.Default()
 	r.POST("/signup", register)
 	r.POST("/signin", signIn)
+	r.POST("/SubmitQuiz/:QuizId/:Username/:Score", addAttemptedQuiz)
 	r.GET("/user/:id", dashboard)
 	r.POST("/AddQuestion", addQuestion)
 	r.GET("/All_Quizes", getAll)
 	r.GET("/QuizQues/:id", fetchQuiz)
 	r.Run()
 
+}
+
+func addAttemptedQuiz(c *gin.Context) {
+	fmt.Println(c.Params)
+
+	username := c.Param("Username")
+	quizID := c.Params.ByName("QuizId")
+	score := c.Params.ByName("Score")
+
+	var u user
+	db.Where("username = ?", username).First(&u)
+
+	var q quizAttempted
+	q.QuizID = quizID
+	q.Score = score
+	q.UserID = u.ID
+
+	if db.Where("user_id = ? AND quiz_id = ? AND score = ?", u.ID, quizID, score).First(&q).RecordNotFound() {
+		db.Create(&q)
+	} else {
+		c.Header("access-control-allow-origin", "*")
+		c.JSON(200, gin.H{
+			"Hola": "holo",
+		})
+	}
+
+	c.Header("access-control-allow-origin", "*")
+	c.JSON(200, gin.H{
+		"user": q,
+	})
 }
 
 func fetchQuiz(c *gin.Context) {
