@@ -74,8 +74,21 @@ func main() {
 	r.POST("/AddQuestion", addQuestion)
 	r.GET("/All_Quizes/:username", getAll)
 	r.GET("/QuizQues/:id", fetchQuiz)
+	r.GET("/GetGenres", getGenres)
 	r.Run()
 
+}
+
+func getGenres(c *gin.Context) {
+	var q []quiz
+	db.Select("distinct(genre)").Find(&q)
+
+	fmt.Println(q)
+
+	c.Header("access-control-allow-origin", "*")
+	c.JSON(200, gin.H{
+		"genres": q,
+	})
 }
 
 func addAttemptedQuiz(c *gin.Context) {

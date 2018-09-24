@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 import GiveQuiz from './GiveQuiz';
 class All_Quizes extends Component {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Button, TextField, Checkbox, FormControlLabel } from '@material-ui/core';
+import { Button, Checkbox, FormControlLabel } from '@material-ui/core';
 
 class GiveQuiz extends Component {
 
