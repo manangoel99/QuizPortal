@@ -67,6 +67,8 @@ class GiveQuiz extends Component {
         .then(json => {
             console.log(json);
         });
+
+        window.location.reload();
     }
 
     render() {

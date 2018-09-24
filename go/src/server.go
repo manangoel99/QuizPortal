@@ -72,7 +72,7 @@ func main() {
 	r.POST("/SubmitQuiz/:QuizId/:Username/:Score", addAttemptedQuiz)
 	r.GET("/user/:id", dashboard)
 	r.POST("/AddQuestion", addQuestion)
-	r.GET("/All_Quizes", getAll)
+	r.GET("/All_Quizes/:username", getAll)
 	r.GET("/QuizQues/:id", fetchQuiz)
 	r.Run()
 
@@ -93,7 +93,7 @@ func addAttemptedQuiz(c *gin.Context) {
 	q.Score = score
 	q.UserID = u.ID
 
-	if db.Where("user_id = ? AND quiz_id = ? AND score = ?", u.ID, quizID, score).First(&q).RecordNotFound() {
+	if db.Where("user_id = ? AND quiz_id = ?", u.ID, quizID).First(&q).RecordNotFound() {
 		db.Create(&q)
 	} else {
 		c.Header("access-control-allow-origin", "*")
@@ -131,6 +131,19 @@ func fetchQuiz(c *gin.Context) {
 
 func getAll(c *gin.Context) {
 	var q []quiz
+	username := c.Params.ByName("username")
+
+	var u user
+
+	db.Where("username = ?", username).Find(&u)
+
+	var givenQuizes []quizAttempted
+
+	db.Where("user_id = ?", u.ID).Find(&givenQuizes)
+
+	//fmt.Println(givenQuizes)
+
+	//fmt.Println(u)
 
 	if err := db.Find(&q).Error; err != nil {
 		c.AbortWithStatus(404)
@@ -138,7 +151,10 @@ func getAll(c *gin.Context) {
 	} else {
 		fmt.Println(q)
 		c.Header("access-control-allow-origin", "*")
-		c.JSON(200, q)
+		c.JSON(200, gin.H{
+			"quizes":    q,
+			"attempted": givenQuizes,
+		})
 	}
 }
 

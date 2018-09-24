@@ -9,20 +9,37 @@ class All_Quizes extends Component {
             data : [],
             quiz_num : NaN,
             quiz_selected : false,
-            spec_quiz_data : []
+            spec_quiz_data : [],
+            attempted : [],
+            scores : []
         };
     }
 
     componentDidMount() {
-        const request = new Request("http://localhost:8080/All_Quizes")
+
+        let username = JSON.parse(localStorage.getItem('user')).username;
+
+        const request = new Request("http://localhost:8080/All_Quizes/" + username);
         fetch(request, {
             method : "GET"
         })
         .then(response => response.json())
         .then(data => {
             console.log(data);
+
+            let attempted_id = [];
+            let score_dict = {};
+
+            for (var i = 0; i < data.attempted.length; i++) {
+                //console.log(data.attempted[i].QuizID);
+                attempted_id.push(data.attempted[i].QuizID);
+                score_dict[data.attempted[i].QuizID] = data.attempted[i].Score;
+            }
+            console.log(attempted_id);
             this.setState({
-                data : data
+                data : data.quizes,
+                attempted : attempted_id,
+                scores : score_dict,
             });
         });
     }
@@ -71,14 +88,29 @@ class All_Quizes extends Component {
                         </thead>
                         <tbody>
                             {this.state.data.map((item, key) => {
-                                return (
-                                    <tr key={key}>
-                                        <td>{item.id}</td>
-                                        <td>{item.name}</td>
-                                        <td>{item.genre}</td>
-                                        <td><Button id={item.id} onClick={this.OpenQuiz} variant="raised" color="primary">Open Quiz</Button></td>
-                                    </tr>
-                                )
+                                //console.log(this.state.attempted.includes(item.id.toString()));
+                                //console.log(item.id);
+                                if (!this.state.attempted.includes(item.id.toString())) {
+                                    return (
+                                        <tr key={key}>
+                                            <td>{item.id}</td>
+                                            <td>{item.name}</td>
+                                            <td>{item.genre}</td>
+                                            <td><Button id={item.id} onClick={this.OpenQuiz} variant="raised" color="primary">Open Quiz</Button></td>
+                                        </tr>
+                                    )
+                                }
+
+                                else {
+                                    return (
+                                        <tr key={key}>
+                                            <td>{item.id}</td>
+                                            <td>{item.name}</td>
+                                            <td>{item.genre}</td>
+                                            <td>You Have attempted this quiz and your score is {this.state.scores[item.id]}</td>
+                                        </tr>
+                                    )
+                                }
                             })}
                             
                         </tbody>
