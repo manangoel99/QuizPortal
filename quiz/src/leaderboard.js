@@ -18,7 +18,9 @@ class Board extends Component {
         .then(json => {
             console.log(json);
             this.setState({
-                data : json.arr
+                data : json.arr.sort(function (a, b) {
+                    return -1 * (a.score - b.score)
+                }),
             });
         });
 
