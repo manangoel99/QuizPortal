@@ -76,7 +76,32 @@ func main() {
 	r.GET("/QuizQues/:id", fetchQuiz)
 	r.GET("/GetGenres", getGenres)
 	r.GET("/FetchLeaderBoard/:genre", fetchLeaderBoard)
+	r.GET("/EditQuizFetch/:id", fetchQuiz)
+	r.OPTIONS("/DeleteQuiz/:id", deleteQuiz)
 	r.Run()
+
+}
+
+func deleteQuiz(c *gin.Context) {
+	fmt.Println(c.Params)
+
+	id := c.Params.ByName("id")
+	var q quiz
+
+	db.Where("ID = ?", id).First(&q)
+
+	fmt.Println(q)
+
+	name := q.Name
+
+	db.Where("quiz_name = ?", name).Delete(&question{})
+	db.Where("id = ?", id).Delete(&quiz{})
+	db.Where("quiz_id = ?", id).Delete(&quizAttempted{})
+
+	c.Header("access-control-allow-origin", "*")
+	c.JSON(200, gin.H{
+		"quiz": q,
+	})
 
 }
 
