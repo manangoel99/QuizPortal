@@ -33,8 +33,10 @@ class Board extends Component {
                 <h1>{this.state.genre}</h1>
                 <table className="table table-responsive table-striped table-hover table-dark">
                     <thead>
-                        <th>Username</th>
-                        <th>Score</th>
+                        <tr>
+                            <th>Username</th>
+                            <th>Score</th>
+                        </tr>
                     </thead>
                     <tbody>
                         {this.state.data.map((item, key) => {

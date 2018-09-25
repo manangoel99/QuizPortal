@@ -81,12 +81,8 @@ func main() {
 }
 
 func fetchLeaderBoard(c *gin.Context) {
-	fmt.Println(c.Params)
+
 	c.Header("access-control-allow-origin", "*")
-
-	//var q []quizAttempted
-
-	//var l []leader
 
 	type leader struct {
 		UserName string `json:"username"`
@@ -109,8 +105,36 @@ func fetchLeaderBoard(c *gin.Context) {
 			le.Score = score
 			l = append(l, le)
 		}
+	} else {
+		genre := c.Param("genre")
+		//fmt.Println(genre)
 
-		fmt.Println(l)
+		var idList []uint
+
+		ids, err := db.Raw("select id from quizzes where genre = ?", genre).Rows()
+		fmt.Println(err)
+		for ids.Next() {
+			var i uint
+			ids.Scan(&i)
+			idList = append(idList, i)
+		}
+
+		fmt.Println(idList)
+		for index, element := range idList {
+			rows, err := db.Raw("select distinct(user_name), sum(score) from quiz_attempteds where quiz_id = ? group by user_name", element).Rows()
+			fmt.Println(err)
+			for rows.Next() {
+				var name string
+				var score string
+				rows.Scan(&name, &score)
+				var le leader
+				le.UserName = name
+				le.Score = score
+				l = append(l, le)
+				//fmt.Println(name, score)
+			}
+			fmt.Println(index)
+		}
 	}
 
 	fmt.Println(l)
