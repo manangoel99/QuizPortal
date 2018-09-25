@@ -81,6 +81,7 @@ class Signup extends Component {
             };
             localStorage.setItem('user', JSON.stringify(user));
           });
+          window.location.reload();
         }
       });
     }
