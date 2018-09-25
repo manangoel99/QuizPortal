@@ -78,8 +78,42 @@ func main() {
 	r.GET("/FetchLeaderBoard/:genre", fetchLeaderBoard)
 	r.GET("/EditQuizFetch/:id", fetchQuiz)
 	r.OPTIONS("/DeleteQuiz/:id", deleteQuiz)
+	r.POST("/EditQuestion", editQuestion)
+	r.OPTIONS("/DeleteQues/:id", delQuestion)
 	r.Run()
 
+}
+
+func delQuestion(c *gin.Context) {
+	fmt.Println(c.Params)
+
+	quesid := c.Param("id")
+
+	db.Where("ID = ?", quesid).Delete(&question{})
+
+	c.Header("access-control-allow-origin", "*")
+	c.JSON(200, gin.H{
+		"message": "DELETED",
+	})
+}
+
+func editQuestion(c *gin.Context) {
+	var q question
+	c.BindJSON(&q)
+	//fmt.Println(c.Keys)
+	var q1 question
+
+	db.Where("id = ?", q.ID).First(&q1)
+
+	q1 = q
+
+	db.Save(&q1)
+
+	fmt.Println(q)
+	c.Header("access-control-allow-origin", "*")
+	c.JSON(200, gin.H{
+		"changed_ques": q1,
+	})
 }
 
 func deleteQuiz(c *gin.Context) {
