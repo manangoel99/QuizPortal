@@ -49,9 +49,9 @@ type loginuser struct {
 }
 
 type quizAttempted struct {
-	UserID uint   `json:"UserID"`
-	QuizID string `json:"QuizID"`
-	Score  string `json:"Score"`
+	UserName string `json:"UserName"`
+	QuizID   string `json:"QuizID"`
+	Score    string `json:"Score"`
 }
 
 func main() {
@@ -75,8 +75,51 @@ func main() {
 	r.GET("/All_Quizes/:username", getAll)
 	r.GET("/QuizQues/:id", fetchQuiz)
 	r.GET("/GetGenres", getGenres)
+	r.GET("/FetchLeaderBoard/:genre", fetchLeaderBoard)
 	r.Run()
 
+}
+
+func fetchLeaderBoard(c *gin.Context) {
+	fmt.Println(c.Params)
+	c.Header("access-control-allow-origin", "*")
+
+	//var q []quizAttempted
+
+	//var l []leader
+
+	type leader struct {
+		UserName string `json:"username"`
+		Score    string `json:"score"`
+	}
+	var l []leader
+
+	if c.Params.ByName("genre") == "all" {
+		rows, err := db.Raw("select distinct(user_name), sum(score) from quiz_attempteds group by user_name order by sum(score)").Rows()
+		fmt.Println(err)
+
+		defer rows.Close()
+
+		for rows.Next() {
+			var name string
+			var score string
+			rows.Scan(&name, &score)
+			var le leader
+			le.UserName = name
+			le.Score = score
+			l = append(l, le)
+		}
+
+		fmt.Println(l)
+	}
+
+	fmt.Println(l)
+
+	c.JSON(200, gin.H{
+		"arr": l,
+	})
+
+	//fmt.Println(r)
 }
 
 func getGenres(c *gin.Context) {
@@ -104,9 +147,9 @@ func addAttemptedQuiz(c *gin.Context) {
 	var q quizAttempted
 	q.QuizID = quizID
 	q.Score = score
-	q.UserID = u.ID
+	q.UserName = username
 
-	if db.Where("user_id = ? AND quiz_id = ?", u.ID, quizID).First(&q).RecordNotFound() {
+	if db.Where("user_name = ? AND quiz_id = ?", username, quizID).First(&q).RecordNotFound() {
 		db.Create(&q)
 	} else {
 		c.Header("access-control-allow-origin", "*")
@@ -152,7 +195,7 @@ func getAll(c *gin.Context) {
 
 	var givenQuizes []quizAttempted
 
-	db.Where("user_id = ?", u.ID).Find(&givenQuizes)
+	db.Where("user_name = ?", username).Find(&givenQuizes)
 
 	//fmt.Println(givenQuizes)
 

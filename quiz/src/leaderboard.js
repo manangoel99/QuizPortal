@@ -10,6 +10,18 @@ class Board extends Component {
     }
 
     componentWillReceiveProps() {
+
+        fetch("http://localhost:8080/FetchLeaderBoard/" + this.props.genre, {
+            method : "GET"
+        })
+        .then(response => response.json())
+        .then(json => {
+            console.log(json);
+            this.setState({
+                data : json.arr
+            });
+        });
+
         this.setState({
             genre : this.props.genre
         });
@@ -17,7 +29,26 @@ class Board extends Component {
 
     render() {
         return (
-            <h1>Hola</h1>
+            <div className="container">
+                <h1>{this.state.genre}</h1>
+                <table className="table table-responsive table-striped table-hover table-dark">
+                    <thead>
+                        <th>Username</th>
+                        <th>Score</th>
+                    </thead>
+                    <tbody>
+                        {this.state.data.map((item, key) => {
+                            return (
+                                <tr key={key}>
+                                    <td>{item.username}</td>
+                                    <td>{item.score}</td>
+                                </tr>
+                            )
+                        })}
+                    </tbody>
+
+                </table>
+            </div>
         )
     }
 }
