@@ -81,7 +81,38 @@ func main() {
 	r.OPTIONS("/DeleteQuiz/:id", deleteQuiz)
 	r.POST("/EditQuestion", editQuestion)
 	r.OPTIONS("/DeleteQues/:id", delQuestion)
+	r.GET("/FetchUsers", fetchUsers)
+	r.OPTIONS("/DeleteUser/:id", deleteUser)
 	r.Run()
+
+}
+
+func deleteUser(c *gin.Context) {
+	id := c.Param("id")
+
+	var u user
+
+	db.Where("id = ?", id).First(&u)
+
+	username := u.Username
+
+	db.Where("user_name = ?", username).Delete(&quizAttempted{})
+
+	db.Where("id = ?", id).Delete(&user{})
+	c.Header("access-control-allow-origin", "*")
+	c.JSON(200, gin.H{
+		"message": "DELETED",
+	})
+}
+
+func fetchUsers(c *gin.Context) {
+	var u []user
+	db.Find(&u)
+
+	c.Header("access-control-allow-origin", "*")
+	c.JSON(200, gin.H{
+		"users": u,
+	})
 
 }
 
