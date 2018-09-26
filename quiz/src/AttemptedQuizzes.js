@@ -18,10 +18,6 @@ class AttemptedQuizzes extends Component {
             this.setState({
                 data : json.quiz_arr,
             });
-            return json.quiz_arr
-        })
-        .then(arr => {
-            console.log(arr);
         });
 
     }
