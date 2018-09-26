@@ -6,7 +6,7 @@ class AttemptedQuizzes extends Component {
         super();
         this.state = {
             data : []
-        }
+        };
     }
 
     componentDidMount() {
@@ -34,7 +34,7 @@ class AttemptedQuizzes extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {this.state.data.map((item, key) => {
+                        {this.state.data != null ? this.state.data.map((item, key) => {
                             return (
                                 <tr key={key}>
                                     <td>{item.quiz_name}</td>
@@ -42,7 +42,7 @@ class AttemptedQuizzes extends Component {
                                     <td>{item.score}</td>
                                 </tr>
                             )
-                        })}
+                        }) : null}
                     </tbody>
                     
                 </table>
