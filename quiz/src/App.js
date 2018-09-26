@@ -4,6 +4,7 @@ import Quiz from './AddQuiz';
 import All_Quizes from './All_Quizes';
 import LeaderBoard from './LeaderBoard';
 import EditQuiz from './EditQuiz'; 
+import AttemptedQuizzes from './AttemptedQuizzes';
 import { Button } from '@material-ui/core';
 
 class App extends Component {
@@ -35,9 +36,9 @@ class App extends Component {
                                 <li><Link to={'/LeaderBoard'}>Leader Board</Link></li>
                                 {JSON.parse(localStorage.getItem('user')).isadmin ? <li><Link to={'/EditQuiz'}>Edit Quiz</Link></li> : null}
                             
-                                {/*<li><Link to={'/DeletePerson'}>Delete People</Link></li>
-                                <li><Link to={'/ViewPeople'}>View People</Link></li>*/}
-                                <li><Link to={'/'}><Button color="secondary" onClick={this.HandleSignOut}>Sign Out</Button></Link></li>
+                                <li><Link to={'/AttemptedQuizzes'}>Attempted Quizzes</Link></li>
+                                {/*<li><Link to={'/ViewPeople'}>View People</Link></li>*/}
+                                <li><Link to={'/'}><Button variant="contained" color="secondary" onClick={this.HandleSignOut}>Sign Out</Button></Link></li>
                             </ul>
                         </div>
                     </nav>
@@ -46,6 +47,7 @@ class App extends Component {
                         <Route exact path='/All_Quizes' component={All_Quizes} />
                         <Route exact path='/LeaderBoard' component={LeaderBoard} />
                         <Route exact path='/EditQuiz' component={EditQuiz} />
+                        <Route exact path="/AttemptedQuizzes" component={AttemptedQuizzes}/>
                         {/*<Route exact path='/ViewPeople' component={ViewPeople} />*/}
                     </Switch>
                     </div>

@@ -76,12 +76,54 @@ func main() {
 	r.GET("/QuizQues/:id", fetchQuiz)
 	r.GET("/GetGenres", getGenres)
 	r.GET("/FetchLeaderBoard/:genre", fetchLeaderBoard)
+	r.GET("/FetchAttemptedQuizzes/:username", fetchAttempted)
 	r.GET("/EditQuizFetch/:id", fetchQuiz)
 	r.OPTIONS("/DeleteQuiz/:id", deleteQuiz)
 	r.POST("/EditQuestion", editQuestion)
 	r.OPTIONS("/DeleteQues/:id", delQuestion)
 	r.Run()
 
+}
+
+func fetchAttempted(c *gin.Context) {
+
+	username := c.Param("username")
+
+	var q []quizAttempted
+
+	db.Where("user_name = ?", username).Find(&q)
+
+	type attempts struct {
+		QuizName string `json:"quiz_name"`
+		Score    string `json:"score"`
+		Genre    string `json:"genre"`
+	}
+
+	var a []attempts
+
+	for index, element := range q {
+		fmt.Println(index)
+		rows, err := db.Raw("select name, genre from quizzes where id = ?", element.QuizID).Rows()
+		fmt.Println(err)
+
+		var at attempts
+
+		for rows.Next() {
+			var str string
+			var g string
+			rows.Scan(&str, &g)
+			at.QuizName = str
+			at.Genre = g
+			at.Score = element.Score
+			a = append(a, at)
+		}
+
+	}
+
+	c.Header("access-control-allow-origin", "*")
+	c.JSON(200, gin.H{
+		"quiz_arr": a,
+	})
 }
 
 func delQuestion(c *gin.Context) {
